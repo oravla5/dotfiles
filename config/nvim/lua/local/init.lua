@@ -1,4 +1,4 @@
-print("[nvim/lua/local/init.lua] Initializing lua components")
+print("[nvim/lua/local/init.lua] - Initializing lua components")
 
--- require("local.set")
--- require("local.remap")
+require("local.set")
+require("local.remap")

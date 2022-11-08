@@ -1,2 +1,2 @@
 require("local")
-print("[nvim/init.lua] Initializing neovim")
+print("[nvim/init.lua] - Initializing neovim")
