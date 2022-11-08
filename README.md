@@ -18,7 +18,7 @@ apt-get -y install stow
 
     - Clone the repository
       ```
-      git clone https://github/oravla5/dotfiles.git ~/.dotfiles
+      git clone https://github.com/oravla5/dotfiles.git ~/.dotfiles
       ```
 1. `cd` into the repository directory and configure the dotfiles using `make`
    ```
