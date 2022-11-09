@@ -19,6 +19,7 @@ else
     echo "[$SCRIPT_NAME] INFO: Set temp directory $TEMP_DIR."
 fi
 
+# check if sudo command is available
 sudo_cmd=$(which sudo)
 
 ## Install Neovim

@@ -7,13 +7,21 @@ INSTALL_DIR=$1
 
 sudo_cmd=$(which sudo)
 
+if [ -d $INSTALL_DIR/neovim ] ; then
+    # If target installation directory exists, remove the nvim binary link and the installation directory 
+    if [ -f $BIN_DIR/nvim ] ; then
+        echo "[$SCRIPT_NAME] INFO: Remove symlink $BIN_DIR/nvim to custom installation."
+        $sudo_cmd rm $BIN_DIR/nvim
+        if [ $? == 1 ]; then
+            echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink $BIN_DIR/nvim.\033[0m"
+            exit 1
+        fi
+    fi
 
-# If a nvim binary exists, remove it
-if [ -f $BIN_DIR/nvim ] ; then
-    echo "[$SCRIPT_NAME] INFO: Remove existing symlink $BIN_DIR/nvim."
-    $sudo_cmd rm $BIN_DIR/nvim
+    echo "[$SCRIPT_NAME] INFO: Clean custom nvim installation."
+    rm -rf $INSTALL_DIR/neovim
     if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink $BIN_DIR/nvim.\033[0m"
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove custom neovim installation directory ($INSTALL_DIR/neovim).\033[0m"
         exit 1
     fi
 fi
@@ -24,16 +32,6 @@ if [ -d ~/.local/share/nvim/site/pack/packer ] ; then
     $sudo_cmd rm -rf ~/.local/share/nvim/site/pack/packer
     if [ $? == 1 ]; then
         echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove packer directory (~/.local/share/nvim/site/pack/packer).\033[0m"
-        exit 1
-    fi
-fi
-
-# If target installation directory exists, remove it
-if [ -f $INSTALL_DIR/neovim ] ; then
-    echo "[$SCRIPT_NAME] INFO: Clean existing nvim installation."
-    rm -rf $INSTALL_DIR/neovim
-    if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove existing neovim installation directory ($INSTALL_DIR/neovim).\033[0m"
         exit 1
     fi
 fi
