@@ -10,10 +10,10 @@ sudo_cmd=$(which sudo)
 
 # If a nvim binary exists, remove it
 if [ -f $BIN_DIR/nvim ] ; then
-    echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
-    $sudo_cmd rm /usr/bin/nvim
+    echo "[$SCRIPT_NAME] INFO: Remove existing symlink $BIN_DIR/nvim."
+    $sudo_cmd rm $BIN_DIR/nvim
     if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink /usr/bin/nvim.\033[0m"
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink $BIN_DIR/nvim.\033[0m"
         exit 1
     fi
 fi
