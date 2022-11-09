@@ -3,6 +3,7 @@ DOTFILES_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(DOTFILES_DIR)/bin
 PROGRAMS_DIR := $(HOME)/.programs
 PATH := $(BIN_DIR):$(BIN_DIR)/install:$(BIN_DIR)/clean:$(PATH)
+sudo := $(shell is-supported "is-executable sudo" sudo) 
 
 NVIM_VERSION = v0.8.0
 

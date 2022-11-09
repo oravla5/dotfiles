@@ -4,11 +4,13 @@ SCRIPT_NAME=$(basename $0)
 
 INSTALL_DIR=$1
 
+sudo_cmd=$(which sudo)
+
 
 # If a nvim binary exists, remove it
 if [ -f /usr/bin/nvim ] ; then
     echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
-    sudo rm /usr/bin/nvim
+    $sudo_cmd rm /usr/bin/nvim
     if [ $? == 1 ]; then
         echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink /usr/bin/nvim.\033[0m"
         exit 1
@@ -18,7 +20,7 @@ fi
 # If packer is found
 if [ -d ~/.local/share/nvim/site/pack/packer ] ; then
     echo "[$SCRIPT_NAME] INFO: Remove existing packer directory."
-    sudo rm -rf ~/.local/share/nvim/site/pack/packer
+    $sudo_cmd rm -rf ~/.local/share/nvim/site/pack/packer
     if [ $? == 1 ]; then
         echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove packer directory (~/.local/share/nvim/site/pack/packer).\033[0m"
         exit 1
