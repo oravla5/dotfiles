@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME=$(basename $0)
+
+VIM_VERSION=$1
+INSTALL_DIR=$2
+
+## Install Neovim
+
+# If a nvim binary exists, remove it
+if [ -f /usr/bin/nvim ] ; then
+    echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
+    sudo rm /usr/bin/nvim
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink /usr/bin/nvim.\033[0m"
+        exit 1
+    fi
+fi
+
+# If target installation directory exists, remove it
+if [ -f $INSTALL_DIR/neovim ] ; then
+    echo "[clean-nvim.sh] INFO: Clean existing nvim installation."
+    rm -rf $INSTALL_DIR/neovim
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove existing neovim installation directory ($INSTALL_DIR/neovim).\033[0m"
+        exit 1
+    fi
+fi
+
+# Create install directory
+echo "[$SCRIPT_NAME] INFO: Create directory for neovim installation."
+mkdir -p $INSTALL_DIR/neovim
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create directory for neovim installation ($INSTALL_DIR/neovim).\033[0m"
+    exit 1
+fi
+cd $INSTALL_DIR/neovim
+
+# Download neovim package
+echo "[$SCRIPT_NAME] INFO: Download neovim package."
+curl -sL https://github.com/neovim/neovim/releases/download/$VIM_VERSION/nvim-linux64.tar.gz --output /tmp/nvim-linux64.tar.gz
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download neovim $VIM_VERSION.\033[0m"
+    exit 1
+fi
+
+# Extract neovim package
+echo "[$SCRIPT_NAME] INFO: Extract neovim package."
+tar xzf /tmp/nvim-linux64.tar.gz
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to extract neovim.\033[0m"
+    exit 1
+fi
+
+# Create symlink to neovim
+echo "[$SCRIPT_NAME] INFO: Create nvim symlink"
+sudo ln -s $INSTALL_DIR/neovim/nvim-linux64/bin/nvim /usr/bin/nvim
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create symlink (/usr/bin/nvim --> $INSTALL_DIR/neovim/nvim-linux64/bin/nvim).\033[0m"
+    exit 1
+fi
+
+## Install packer for plugin management
+if [ -d ~/.local/share/nvim/site/pack/packer ] ; then
+    echo "[$SCRIPT_NAME] INFO: Remove existing packer directory."
+    sudo rm -rf ~/.local/share/nvim/site/pack/packer
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove packer directory (~/.local/share/nvim/site/pack/packer).\033[0m"
+        exit 1
+    fi
+fi
+
+echo "[$SCRIPT_NAME] INFO: Download Packer plugin manager."
+git clone --quiet --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download Packer plugin manager (https://github.com/wbthomason/packer.nvim).\033[0m"
+    exit 1
+fi
+
+exit 0
+

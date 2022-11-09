@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME=$(basename $0)
+
+INSTALL_DIR=$1
+
+
+# If a nvim binary exists, remove it
+if [ -f /usr/bin/nvim ] ; then
+    echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
+    sudo rm /usr/bin/nvim
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink /usr/bin/nvim.\033[0m"
+        exit 1
+    fi
+fi
+
+# If packer is found
+if [ -d ~/.local/share/nvim/site/pack/packer ] ; then
+    echo "[$SCRIPT_NAME] INFO: Remove existing packer directory."
+    sudo rm -rf ~/.local/share/nvim/site/pack/packer
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove packer directory (~/.local/share/nvim/site/pack/packer).\033[0m"
+        exit 1
+    fi
+fi
+
+# If target installation directory exists, remove it
+if [ -f $INSTALL_DIR/neovim ] ; then
+    echo "[$SCRIPT_NAME] INFO: Clean existing nvim installation."
+    rm -rf $INSTALL_DIR/neovim
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove existing neovim installation directory ($INSTALL_DIR/neovim).\033[0m"
+        exit 1
+    fi
+fi
+
+exit 0
