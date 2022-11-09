@@ -10,7 +10,7 @@ SCRIPT_NAME=$(basename $0)
 if [ -d /tmp ] ; then
     TEMP_DIR=/tmp
 else
-    TEMP_DIR=~/.tmp
+    TEMP_DIR="~/.tmp"
     mkdir $TEMP_DIR
 fi
 
@@ -50,7 +50,6 @@ cd $INSTALL_DIR/neovim
 
 # Download neovim package
 echo "[$SCRIPT_NAME] INFO: Download neovim package."
-mkdir -p /tmp
 curl -sL https://github.com/neovim/neovim/releases/download/$VIM_VERSION/nvim-linux64.tar.gz --output $TEMP_DIR/nvim-linux64.tar.gz
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download neovim $VIM_VERSION.\033[0m"
