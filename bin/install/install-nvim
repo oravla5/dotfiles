@@ -7,13 +7,16 @@ INSTALL_DIR=$2
 BIN_DIR=$(dirname $(which bash))
 SCRIPT_NAME=$(basename $0)
 
-TEMP_DIR=~/.tmp
+TEMP_DIR="~/.tmp"
 if [ -d /tmp ] ; then
-    TEMP_DIR=/tmp
+    TEMP_DIR="/tmp"
+    echo "[$SCRIPT_NAME] INFO: Set temp directory $TEMP_DIR."
 elif [! -d $TEMP_DIR ] ; then
+    echo "[$SCRIPT_NAME] INFO: Create and set temp directory $TEMP_DIR."
     mkdir $TEMP_DIR
+else
+    echo "[$SCRIPT_NAME] INFO: Set temp directory $TEMP_DIR."
 fi
-
 
 sudo_cmd=$(which sudo)
 
@@ -21,10 +24,10 @@ sudo_cmd=$(which sudo)
 
 # If a nvim binary exists, remove it
 if [ -f $BIN_DIR/nvim ] ; then
-    echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
+    echo "[$SCRIPT_NAME] INFO: Remove existing symlink $BIN_DIR/nvim."
     $sudo_cmd rm $BIN_DIR/nvim
     if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink /usr/bin/nvim.\033[0m"
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink $BIN_DIR/nvim.\033[0m"
         exit 1
     fi
 fi
