@@ -11,7 +11,7 @@ TEMP_DIR="~/.tmp"
 if [ -d /tmp ] ; then
     TEMP_DIR="/tmp"
     echo "[$SCRIPT_NAME] INFO: Set temp directory $TEMP_DIR."
-elif [! -d $TEMP_DIR ] ; then
+elif [ ! -d $TEMP_DIR ] ; then
     echo "[$SCRIPT_NAME] INFO: Create and set temp directory $TEMP_DIR."
     mkdir $TEMP_DIR
 else
