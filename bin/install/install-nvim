@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+BIN_DIR=$(dirname $(which bash))
 SCRIPT_NAME=$(basename $0)
 
 VIM_VERSION=$1
@@ -10,9 +11,9 @@ sudo_cmd=$(which sudo)
 ## Install Neovim
 
 # If a nvim binary exists, remove it
-if [ -f /usr/bin/nvim ] ; then
+if [ -f $BIN_DIR/nvim ] ; then
     echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
-    $sudo_cmd rm /usr/bin/nvim
+    $sudo_cmd rm $BIN_DIR/nvim
     if [ $? == 1 ]; then
         echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink /usr/bin/nvim.\033[0m"
         exit 1
@@ -56,9 +57,9 @@ fi
 
 # Create symlink to neovim
 echo "[$SCRIPT_NAME] INFO: Create nvim symlink"
-$sudo_cmd ln -s $INSTALL_DIR/neovim/nvim-linux64/bin/nvim /usr/bin/nvim
+$sudo_cmd ln -s $INSTALL_DIR/neovim/nvim-linux64/bin/nvim $BIN_DIR/nvim
 if [ $? == 1 ]; then
-    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create symlink (/usr/bin/nvim --> $INSTALL_DIR/neovim/nvim-linux64/bin/nvim).\033[0m"
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create symlink ($BIN_DIR/nvim --> $INSTALL_DIR/neovim/nvim-linux64/bin/nvim).\033[0m"
     exit 1
 fi
 

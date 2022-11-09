@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+BIN_DIR=$(dirname $(which bash))
 SCRIPT_NAME=$(basename $0)
 
 INSTALL_DIR=$1
@@ -8,7 +9,7 @@ sudo_cmd=$(which sudo)
 
 
 # If a nvim binary exists, remove it
-if [ -f /usr/bin/nvim ] ; then
+if [ -f $BIN_DIR/nvim ] ; then
     echo "[$SCRIPT_NAME] INFO: Remove existing symlink /usr/bin/nvim."
     $sudo_cmd rm /usr/bin/nvim
     if [ $? == 1 ]; then
