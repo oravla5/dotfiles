@@ -7,10 +7,10 @@ INSTALL_DIR=$2
 BIN_DIR=$(dirname $(which bash))
 SCRIPT_NAME=$(basename $0)
 
+TEMP_DIR=~/.tmp
 if [ -d /tmp ] ; then
     TEMP_DIR=/tmp
-else
-    TEMP_DIR="~/.tmp"
+elif [! -d $TEMP_DIR ] ; then
     mkdir $TEMP_DIR
 fi
 
