@@ -4,12 +4,13 @@
 VIM_VERSION=$1
 INSTALL_DIR=$2
 
+MIN_VERSION='0.7.2'
 BIN_DIR=$(dirname $(which bash))
 SCRIPT_NAME=$(basename $0)
 
-TEMP_DIR="~/.tmp"
+TEMP_DIR=~/.tmp
 if [ -d /tmp ] ; then
-    TEMP_DIR="/tmp"
+    TEMP_DIR=/tmp
     echo "[$SCRIPT_NAME] INFO: Set temp directory $TEMP_DIR."
 elif [ ! -d $TEMP_DIR ] ; then
     echo "[$SCRIPT_NAME] INFO: Create and set temp directory $TEMP_DIR."
@@ -21,60 +22,76 @@ fi
 sudo_cmd=$(which sudo)
 
 ## Install Neovim
-
-# If a nvim binary exists, remove it
-if [ -f $BIN_DIR/nvim ] ; then
-    echo "[$SCRIPT_NAME] INFO: Remove existing symlink $BIN_DIR/nvim."
-    $sudo_cmd rm $BIN_DIR/nvim
-    if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink $BIN_DIR/nvim.\033[0m"
+install_vim=1
+vim_cmd=$(which nvim)
+if [ $vim_cmd ] ; then
+    install_vim=0
+    vim_version=$(nvim --version | grep -Po 'NVIM v\d.\d.\d' | grep -Po '\d.\d.\d')
+    echo "[$SCRIPT_NAME] INFO: Detected Neovim installation with version $vim_version."
+    is-greater-version $MIN_VERSION $vim_version
+    if [ $? -eq 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Installed Neovim version ($vim_version) is less than minimum required ($MIN_VERSION).\033[0m"
         exit 1
     fi
+
 fi
 
-# If target installation directory exists, remove it
-if [ -f $INSTALL_DIR/neovim ] ; then
-    echo "[clean-nvim.sh] INFO: Clean existing nvim installation."
-    rm -rf $INSTALL_DIR/neovim
+if [ $install_vim -eq 1 ] ; then
+
+    # If a nvim binary exists, remove it
+    if [ -f $BIN_DIR/nvim ] ; then
+        echo "[$SCRIPT_NAME] INFO: Remove existing symlink $BIN_DIR/nvim."
+        $sudo_cmd rm $BIN_DIR/nvim
+        if [ $? == 1 ]; then
+            echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove symlink $BIN_DIR/nvim.\033[0m"
+            exit 1
+        fi
+    fi
+
+    # If target installation directory exists, remove it
+    if [ -f $INSTALL_DIR/neovim ] ; then
+        echo "[clean-nvim.sh] INFO: Clean existing nvim installation."
+        rm -rf $INSTALL_DIR/neovim
+        if [ $? == 1 ]; then
+            echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove existing neovim installation directory ($INSTALL_DIR/neovim).\033[0m"
+            exit 1
+        fi
+    fi
+
+    # Create install directory
+    echo "[$SCRIPT_NAME] INFO: Create directory for neovim installation."
+    mkdir -p $INSTALL_DIR/neovim
     if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove existing neovim installation directory ($INSTALL_DIR/neovim).\033[0m"
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create directory for neovim installation ($INSTALL_DIR/neovim).\033[0m"
         exit 1
     fi
-fi
+    cd $INSTALL_DIR/neovim
 
-# Create install directory
-echo "[$SCRIPT_NAME] INFO: Create directory for neovim installation."
-mkdir -p $INSTALL_DIR/neovim
-if [ $? == 1 ]; then
-    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create directory for neovim installation ($INSTALL_DIR/neovim).\033[0m"
-    exit 1
-fi
-cd $INSTALL_DIR/neovim
+    # Download neovim package
+    echo "[$SCRIPT_NAME] INFO: Download neovim package."
+    curl -sL https://github.com/neovim/neovim/releases/download/$VIM_VERSION/nvim-linux64.tar.gz --output $TEMP_DIR/nvim-linux64.tar.gz
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download neovim $VIM_VERSION.\033[0m"
+        exit 1
+    fi
 
-# Download neovim package
-echo "[$SCRIPT_NAME] INFO: Download neovim package."
-curl -sL https://github.com/neovim/neovim/releases/download/$VIM_VERSION/nvim-linux64.tar.gz --output $TEMP_DIR/nvim-linux64.tar.gz
-if [ $? == 1 ]; then
-    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download neovim $VIM_VERSION.\033[0m"
-    exit 1
-fi
+    # Extract neovim package
+    echo "[$SCRIPT_NAME] INFO: Extract neovim package."
+    tar xzf $TEMP_DIR/nvim-linux64.tar.gz
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to extract neovim.\033[0m"
+        exit 1
+    fi
 
-# Extract neovim package
-echo "[$SCRIPT_NAME] INFO: Extract neovim package."
-tar xzf $TEMP_DIR/nvim-linux64.tar.gz
-if [ $? == 1 ]; then
-    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to extract neovim.\033[0m"
-    exit 1
-fi
+    rm $TEMP_DIR/nvim-linux64.tar.gz
 
-rm $TEMP_DIR/nvim-linux64.tar.gz
-
-# Create symlink to neovim
-echo "[$SCRIPT_NAME] INFO: Create nvim symlink"
-$sudo_cmd ln -s $INSTALL_DIR/neovim/nvim-linux64/bin/nvim $BIN_DIR/nvim
-if [ $? == 1 ]; then
-    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create symlink ($BIN_DIR/nvim --> $INSTALL_DIR/neovim/nvim-linux64/bin/nvim).\033[0m"
-    exit 1
+    # Create symlink to neovim
+    echo "[$SCRIPT_NAME] INFO: Create nvim symlink"
+    $sudo_cmd ln -s $INSTALL_DIR/neovim/nvim-linux64/bin/nvim $BIN_DIR/nvim
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create symlink ($BIN_DIR/nvim --> $INSTALL_DIR/neovim/nvim-linux64/bin/nvim).\033[0m"
+        exit 1
+    fi
 fi
 
 ## Install packer for plugin management
