@@ -9,7 +9,6 @@ fi
 
 if [ -f $CURRENT_SCRIPT ] ; then
     DOTFILES_DIR=$(dirname $(dirname $CURRENT_SCRIPT))
-    echo "DOTFILES_DIR = $DOTFILES_DIR"
 else
     echo -e "\033[1;91m[.bash_profile] ERROR: Failed to locate dotfiles directory.\033[0m"
     return
