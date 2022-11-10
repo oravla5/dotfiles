@@ -24,9 +24,11 @@ if [ -d $INSTALL_DIR ] ; then
     fi
 fi
 
-echo "[$SCRIPT_NAME] INFO: Remove fzf from path ($INSTALL_DIR/bin)."
-export PATH=$(echo $PATH | sed -e "s,$INSTALL_DIR/bin,," | sed -e "s,:$,," | sed -e "s,::,:,")
-if [ $? == 1 ]; then
-    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove fzf from path.\033[0m"
-    exit 1
+if grep -q "$INSTALL_DIR/bin" <<< "$PATH"; then
+    echo "[$SCRIPT_NAME] INFO: Remove fzf from path ($INSTALL_DIR/bin)."
+    export PATH=$(echo $PATH | sed -e "s,$INSTALL_DIR/bin,," | sed -e "s,:$,," | sed -e "s,::,:,")
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove fzf from path.\033[0m"
+        exit 1
+    fi
 fi

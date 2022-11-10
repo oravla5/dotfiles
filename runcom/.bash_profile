@@ -14,5 +14,11 @@ else
     return
 fi
 
+# Source system dotfiles
+
+for DOTFILE in "$DOTFILES_DIR"/system/.{prompt,fzf}; do
+    echo "Sourcing $DOTFILE"
+    [ -f $DOTFILE ] && . $DOTFILE
+done
 # Add fzf configuration to the path
-[ -f $DOTFILES_DIR/system/.fzf ] && source $DOTFILES_DIR/system/.fzf
+# [ -f $DOTFILES_DIR/system/.fzf ] && source $DOTFILES_DIR/system/.fzf

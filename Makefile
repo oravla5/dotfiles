@@ -35,7 +35,7 @@ unlink: stow-linux
 
 install: linux-nvim linux-fzf
 
-linux-nvim:
+linux-nvim: link
 	@(install-nvim $(NVIM_VERSION) $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing Neovim\033[0m"; sh -c 'exit 1'))
 	@(nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'; printf '\n'  || (echo -e "\033[1;91m[ERROR] Error syncing Packer."; sh -c 'exit 1'))
 
