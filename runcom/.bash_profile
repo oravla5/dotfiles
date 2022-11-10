@@ -17,7 +17,6 @@ fi
 # Source system dotfiles
 
 for DOTFILE in "$DOTFILES_DIR"/system/.{prompt,fzf}; do
-    echo "Sourcing $DOTFILE"
     [ -f $DOTFILE ] && . $DOTFILE
 done
 # Add fzf configuration to the path
