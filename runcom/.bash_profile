@@ -1,17 +1,19 @@
 # If not running interactively, don't do anythin
 [ -z "$PS1" ] && return
 
-# Resolve DOTFILES_DIR (assuming ~/.dotfiles on distros without readlink and/or $BASH_SOURCE/$0)
-CURRENT_SCRIPT=$BASH_SOURCE
+# Resolve path of current file
+CURRENT_SCRIPT=$(realpath -- "$BASH_SOURCE")
+if [ $? -eq 1 ] ; then
+    CURRENT_SCRIPT=$(readlink -- "$BASH_SOURCE")
+fi
 
-if [[ -n $CURRENT_SCRIPT && -x readlink ]]; then
-  SCRIPT_PATH=$(readlink -n $CURRENT_SCRIPT)
-  DOTFILES_DIR="${PWD}/$(dirname $(dirname $SCRIPT_PATH))"
-elif [ -d "$HOME/.dotfiles" ]; then
-  DOTFILES_DIR="$HOME/.dotfiles"
+if [ -f $CURRENT_SCRIPT ] ; then
+    DOTFILES_DIR=$(dirname $(dirname $CURRENT_SCRIPT))
+    echo "DOTFILES_DIR = $DOTFILES_DIR"
 else
-  echo "Unable to find dotfiles, exiting."
-  return
-fi 
+    echo -e "\033[1;91m[.bash_profile] ERROR: Failed to locate dotfiles directory.\033[0m"
+    return
+fi
 
+# Add fzf configuration to the path
 [ -f $DOTFILES_DIR/system/.fzf ] && source $DOTFILES_DIR/system/.fzf

@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME=$(basename $0)
+
+INSTALL_DIR=$1/fzf
+CURRENT_DIR=$(pwd)
+
+if [ -d $INSTALL_DIR ] ; then
+    
+    cd $INSTALL_DIR 
+    echo "[$SCRIPT_NAME] INFO: Uninstall fzf."
+    ./uninstall --xdg >/dev/null 2>&1
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to uninstall fzf.\033[0m"
+        exit 1
+    fi
+
+    echo "[$SCRIPT_NAME] INFO: Clean custom fzf installation."
+    cd $CURRENT_DIR 
+    rm -rf $INSTALL_DIR
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove custom fzf installation directory ($INSTALL_DIR).\033[0m"
+        exit 1
+    fi
+fi
+
+echo "[$SCRIPT_NAME] INFO: Remove fzf from path ($INSTALL_DIR/bin)."
+export PATH=$(echo $PATH | sed -e "s,$INSTALL_DIR/bin,," | sed -e "s,:$,," | sed -e "s,::,:,")
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove fzf from path.\033[0m"
+    exit 1
+fi

@@ -21,14 +21,17 @@ stow-linux:
 	@(is-executable stow || (echo -e "\033[1;91mstow is not installed.\033[0m Please install with 'apt-get install stow'"; sh -c 'exit 1'))
 
 link: stow-linux
-	for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
-		mv -v $(HOME)/$$FILE{,.bak}; fi; done
+	@(for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE -a ! -h $(HOME)/$$FILE ]; then \
+		mv -v $(HOME)/$$FILE{,.bak}; fi; done)
 	@(mkdir -p $(XDG_CONFIG_HOME))
 	@(stow -t $(HOME) runcom)
 	@(stow -t $(XDG_CONFIG_HOME) config)
 
 unlink: stow-linux
+	@(stow --delete -t $(HOME) runcom)
 	@(stow --delete -t $(XDG_CONFIG_HOME) config)
+	@(for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE.bak ]; then \
+		mv -v $(HOME)/$$FILE.bak $(HOME)/$${FILE%%.bak}; fi; done)
 
 install: linux-nvim linux-fzf
 
@@ -41,3 +44,4 @@ linux-fzf:
 
 clean: unlink
 	@(clean-nvim $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error cleaning Neovim.\033[0m"; sh -c 'exit 1'))
+	@(clean-fzf $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error cleaning fzf.\033[0m"; sh -c 'exit 1'))

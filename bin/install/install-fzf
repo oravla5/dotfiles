@@ -32,14 +32,14 @@ fi
 
 echo "[$SCRIPT_NAME] INFO: Download fzf."
 cd $INSTALL_DIR/fzf
-git clone --quiet --depth 1 --branch $FZF_VERSION https://github.com/junegunn/fzf.git $INSTALL_DIR/fzf
+git clone --quiet --depth 1 --branch $FZF_VERSION https://github.com/junegunn/fzf.git $INSTALL_DIR/fzf >/dev/null 2>&1
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download fzf (https://github.com/junegunn/fzf.git).\033[0m"
     exit 1
 fi
 
 echo "[$SCRIPT_NAME] INFO: Install fzf."
-./install
+./install --xdg --no-update-rc --bin >/dev/null 2>&1
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to install fzf (https://github.com/junegunn/fzf.git).\033[0m"
     exit 1
