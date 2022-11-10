@@ -1,0 +1,13 @@
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == ~/.programs/fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}~/.programs/fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source "~/.programs/fzf/shell/completion.bash" 2> /dev/null
+
+# Key bindings
+# ------------
+source "~/.programs/fzf/shell/key-bindings.bash"

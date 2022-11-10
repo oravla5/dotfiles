@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME=$(basename $0)
+
+# Parse input
+FZF_VERSION=$1
+INSTALL_DIR=$2
+
+MIN_VERSION=0.22.0
+
+version=$(get-version fzf)
+
+if [ $? -eq 0 ] ; then
+    instal_fzf=0
+    echo "[$SCRIPT_NAME] INFO: Detected fzf installation with version $version."
+    is-greater-version $MIN_VERSION $version
+
+    if [ $? -eq 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Installed fzf version ($version) is less than minimum required ($MIN_VERSION).\033[0m"
+        exit 1
+    fi
+
+    exit 0
+fi
+
+echo "[$SCRIPT_NAME] INFO: Create directory for fzf installation."
+mkdir -p $INSTALL_DIR/fzf
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create directory for fzf installation ($INSTALL_DIR/fzf).\033[0m"
+    exit 1
+fi
+
+echo "[$SCRIPT_NAME] INFO: Download fzf."
+cd $INSTALL_DIR/fzf
+git clone --quiet --depth 1 --branch $FZF_VERSION https://github.com/junegunn/fzf.git $INSTALL_DIR/fzf
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download fzf (https://github.com/junegunn/fzf.git).\033[0m"
+    exit 1
+fi
+
+echo "[$SCRIPT_NAME] INFO: Install fzf."
+./install
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to install fzf (https://github.com/junegunn/fzf.git).\033[0m"
+    exit 1
+fi
+
+exit 0
