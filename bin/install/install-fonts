@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+
+SCRIPT_NAME=$(basename $0)
+
+# Parse input
+FONT=$1
+INSTALL_DIR=$2/nerd-fonts
+
+# [TODO] Check if font is already installed
+
+echo "[$SCRIPT_NAME] INFO: Create directory for nerd-fonts installation."
+mkdir -p $INSTALL_DIR
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to create directory for nerd-fonts installation ($INSTALL_DIR).\033[0m"
+    exit 1
+fi
+
+# Sparse clone of the nerd-fonts repository
+echo "[$SCRIPT_NAME] INFO: Download nerd-fonts repository."
+cd $INSTALL_DIR
+git clone --quiet --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts.git .
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to clone the nerd-fonts repository (https://github.com/ryanoasis/nerd-fonts).\033[0m"
+    exit 1
+fi
+
+git sparse-checkout add patched-fonts/$FONT
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to do a sparse checkeout of the $FONT font.\033[0m"
+    exit 1
+fi
+
+## Install provided nerd-font
+echo "[$SCRIPT_NAME] INFO: Install nerd-font $FONT"
+./install.sh $FONT
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to install specified font $FONT.\033[0m"
+    exit 1
+fi
+
+exit 0
+

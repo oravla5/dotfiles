@@ -15,3 +15,7 @@ vim.opt.smartindent = true
 vim.opt.wrap = false
 
 vim.g.mapleader = " "
+
+-- disable netrw since nvim-tree is used
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1

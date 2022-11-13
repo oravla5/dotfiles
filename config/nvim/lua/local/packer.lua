@@ -7,4 +7,11 @@ return require('packer').startup(function()
     -- Packer can manage itself
     use 'wbthomason/packer.nvim'
     use 'folke/tokyonight.nvim'
+    use 'nvim-tree/nvim-web-devicons'
+    use {'nvim-tree/nvim-tree.lua',
+        requires = {
+            'nvim-tree/nvim-web-devicons',  -- optional, for file icons
+        },
+        tag = 'nightly' -- updated every week
+    }
 end)

@@ -7,6 +7,7 @@ sudo := $(shell is-supported "is-executable sudo" sudo)
 
 NVIM_VERSION = v0.8.0
 FZF_VERSION = 0.34.0
+GIT_VERSION = 2.26.0
 
 export XDG_CONFIG_HOME = $(HOME)/.config
 export STOW_DIR = $(DOTFILES_DIR)
@@ -33,15 +34,20 @@ unlink: stow-linux
 	@(for FILE in $$(\ls -A runcom); do if [ -f $(HOME)/$$FILE.bak ]; then \
 		mv -v $(HOME)/$$FILE.bak $(HOME)/$${FILE%%.bak}; fi; done)
 
-install: linux-nvim linux-fzf
+install: setup-fonts setup-nvim setup-fzf
 
-linux-nvim: link
-	@(install-nvim $(NVIM_VERSION) $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing Neovim\033[0m"; sh -c 'exit 1'))
+setup-nvim: link setup-fonts
+	@(install-nvim $(NVIM_VERSION) $(PROGRAMS_DIR) $(XDG_CONFIG_HOME) || (echo -e "\033[1;91m[ERROR] Error installing Neovim\033[0m"; sh -c 'exit 1'))
 	@(nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'; printf '\n'  || (echo -e "\033[1;91m[ERROR] Error syncing Packer."; sh -c 'exit 1'))
+	@(touch $(XDG_CONFIG_HOME)/nvim/.nvim_configured)
 
-linux-fzf:
-	@(install-fzf $(FZF_VERSION) $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing fzf\033[0m"; sh -c 'exit 1'))
+setup-fzf:
+	@(install-fzf $(FZF_VERSION) $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing fzf.\033[0m"; sh -c 'exit 1'))
+
+setup-fonts:
+	@(install-fonts JetBrainsMono $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing fonts.\033[0m"; sh -c 'exit 1'))
 
 clean: unlink
-	@(clean-nvim $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error cleaning Neovim.\033[0m"; sh -c 'exit 1'))
+	@(clean-nvim $(PROGRAMS_DIR) $(XDG_CONFIG_HOME) || (echo -e "\033[1;91m[ERROR] Error cleaning Neovim.\033[0m"; sh -c 'exit 1'))
 	@(clean-fzf $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error cleaning fzf.\033[0m"; sh -c 'exit 1'))
+	@(clean-fonts $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error cleaning fonts.\033[0m"; sh -c 'exit 1'))

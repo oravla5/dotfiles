@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 VIM_VERSION=$1
 INSTALL_DIR=$2
 

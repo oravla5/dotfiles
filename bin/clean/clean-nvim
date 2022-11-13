@@ -4,8 +4,19 @@ BIN_DIR=$(dirname $(which bash))
 SCRIPT_NAME=$(basename $0)
 
 INSTALL_DIR=$1
+CONFIG_DIR=$2/nvim
 
 sudo_cmd=$(which sudo)
+
+if [ -f $CONFIG_DIR/.nvim_configured ] ; then
+
+    echo "[$SCRIPT_NAME] INFO: Remove file $CONFIG_DIR/.nvim_configured."
+    rm $CONFIG_DIR/.nvim_configured
+    if [ $? == 1 ]; then
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove $CONFIG_DIR/.nvim_configured.\033[0m"
+        exit 1
+    fi
+fi 
 
 if [ -d $INSTALL_DIR/neovim ] ; then
     # If target installation directory exists, remove the nvim binary link and the installation directory 
