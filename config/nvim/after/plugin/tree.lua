@@ -16,6 +16,8 @@ if exists(cfgFile) then
           mappings = {
             list = {
               { key = "u", action = "dir_up" },
+              { key = "h<CR>", action = "split" },
+              { key = "v<CR>", action = "vsplit" },
             },
           },
         },
