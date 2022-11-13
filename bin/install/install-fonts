@@ -18,13 +18,13 @@ fi
 # Sparse clone of the nerd-fonts repository
 echo "[$SCRIPT_NAME] INFO: Download nerd-fonts repository."
 cd $INSTALL_DIR
-git clone --quiet --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts.git .
+git clone --quiet --filter=blob:none --sparse https://github.com/ryanoasis/nerd-fonts.git . >/dev/null 2>&1
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to clone the nerd-fonts repository (https://github.com/ryanoasis/nerd-fonts).\033[0m"
     exit 1
 fi
 
-git sparse-checkout add patched-fonts/$FONT
+git sparse-checkout add patched-fonts/$FONT >/dev/null 2>&1
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to do a sparse checkeout of the $FONT font.\033[0m"
     exit 1
