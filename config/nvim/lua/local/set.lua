@@ -1,5 +1,7 @@
 vim.opt.guicursor = ""
 
+vim.opt.clipboard = "unnamedplus"
+
 vim.opt.nu = true
 vim.opt.relativenumber = true
 
@@ -11,6 +13,8 @@ vim.opt.hlsearch = false
 vim.opt.incsearch = true
 
 vim.opt.smartindent = true
+vim.opt.splitbelow = true
+vim.opt.splitright = true
 
 vim.opt.wrap = false
 
