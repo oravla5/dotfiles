@@ -7,7 +7,7 @@ if [ -d $INSTALL_DIR ] ; then
     
     cd $INSTALL_DIR 
     echo "[$SCRIPT_NAME] INFO: Uninstall nerd-fonts."
-    ./install.sh --remove --xdg >/dev/null 2>&1
+    ./install.sh --remove >/dev/null 2>&1
     if [ $? == 1 ]; then
         echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to uninstall nerd-fonts.\033[0m"
         exit 1

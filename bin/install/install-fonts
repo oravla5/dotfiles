@@ -32,7 +32,7 @@ fi
 
 ## Install provided nerd-font
 echo "[$SCRIPT_NAME] INFO: Install nerd-font $FONT"
-./install.sh $FONT
+./install.sh --quiet $FONT
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to install specified font $FONT.\033[0m"
     exit 1
