@@ -10,10 +10,11 @@ end
 local servers = {
 	"sumneko_lua",
     "clangd",
+    "cmake",
+	"pyright",
 	-- "cssls",
 	-- "html",
 	-- "tsserver",
-	-- "pyright",
 	-- "bashls",
 	"jsonls",
 	-- "yamlls",
