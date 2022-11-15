@@ -1,12 +1,11 @@
 local mason_status_ok, mason = pcall(require, 'mason')
-if not mason_status_ok then
+local mason_config_status_ok, mason_config = pcall(require, 'mason-lspconfig')
+local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
+
+if not (mason_status_ok or mason_config_status_ok or lspconfig_status_ok) then
     return
 end
 
-local mason_config_status_ok, mason_config = pcall(require, 'mason-lspconfig')
-if not mason_config_status_ok then
-    return
-end
 
 local servers = {
 	"sumneko_lua",
@@ -38,10 +37,6 @@ mason_config.setup({
 	automatic_installation = true,
 })
 
-local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
-if not lspconfig_status_ok then
-	return
-end
 
 local opts = {}
 
@@ -53,7 +48,7 @@ for _, server in pairs(servers) do
 
 	server = vim.split(server, "@")[1]
 
-	local require_ok, conf_opts = pcall(require, "lsp.settings." .. server)
+	local require_ok, conf_opts = pcall(require, "lsp.settings" .. server)
 	if require_ok then
 		opts = vim.tbl_deep_extend("force", conf_opts, opts)
 	end
