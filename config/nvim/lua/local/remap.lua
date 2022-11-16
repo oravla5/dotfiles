@@ -2,10 +2,6 @@ local nnoremap = require("local.keymap").nnoremap
 local vnoremap = require("local.keymap").vnoremap
 local inoremap = require("local.keymap").inoremap
 
--- NvimTree bindings
-nnoremap("<leader>ec", "<cmd>NvimTreeClose<CR>")
-nnoremap("<leader>ee", "<cmd>NvimTreeFocus<CR>")
-
 -- Normal mode
 -- Better windows navigation
 nnoremap("<A-h>", "<C-w>h")
@@ -23,11 +19,27 @@ nnoremap("<C-Right>", ":vertical resize +-<CR>")
 nnoremap("<C-j>", ":m .+1<CR>==")
 nnoremap("<C-k>", ":m .-2<CR>==")
 
+-- Buffer manipulation
+nnoremap("<leader>w", ":w<CR>")     -- Save changes in current buffer
+nnoremap("<leader>W", ":wa<CR>")    -- Save changes in all buffers
+nnoremap("<leader>q", ":wq<CR>")    -- Close current buffer saving changes
+nnoremap("<leader>Q", ":q!<CR>")   -- Close current buffer discarding changes
+
+-- Exiting nvim
+nnoremap("<leader>x", ":wqa<CR>")   -- Close nvim saving all changes
+nnoremap("<leader>X", ":qa!<CR>")   -- Close nvim discarding all changes
+
+-- NvimTree bindings
+nnoremap("<leader>ec", "<cmd>NvimTreeClose<CR>")
+nnoremap("<leader>ee", "<cmd>NvimTreeFocus<CR>")
+
 -- Telescope
 nnoremap("<leader>f", "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{ previewer = false })<CR>")
 nnoremap("<leader>F", "<cmd>Telescope live_grep<CR>")
+
 -- Insert mode
 -- Press jk fast to exist insert mode
+inoremap("qq", "<ESC>")
 inoremap("jk", "<ESC>")
 inoremap("kj", "<ESC>")
 
