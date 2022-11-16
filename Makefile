@@ -39,6 +39,7 @@ install: setup-fonts setup-nvim setup-fzf
 setup-nvim: link setup-fonts
 	@(install-nvim $(NVIM_VERSION) $(PROGRAMS_DIR) $(XDG_CONFIG_HOME) || (echo -e "\033[1;91m[ERROR] Error installing Neovim\033[0m"; sh -c 'exit 1'))
 	@(nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'; printf '\n'  || (echo -e "\033[1;91m[ERROR] Error syncing Packer."; sh -c 'exit 1'))
+	@(nvim --headless -c 'TSUpdate qall'; printf '\n' || (echo -e "\033[1;91m[ERROR] Error syncing Packer."; sh -c 'exit 1'))
 
 setup-fzf:
 	@(install-fzf $(FZF_VERSION) $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing fzf.\033[0m"; sh -c 'exit 1'))

@@ -24,7 +24,7 @@ nvim_tree.setup {
                 { key = "c", action = "copy" },                 -- Copy file / directory
                 { key = "x", action = "cut" },                  -- Cut file / directory
                 { key = "p", action = "paste" },                -- Paste file / directory
-                { key = "a", action = "add" },                  -- Create / add file (or directory leaving a '/' at the end)
+                { key = "a", action = "create" },                  -- Create / add file (or directory leaving a '/' at the end)
                 { key = "d", action = "remove" },               -- Remove file
                 -- Toggle visibility
                 { key = "td", action = "toggle_dotfiles" },     -- Toggle visibility of dotfiles

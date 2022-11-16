@@ -30,18 +30,18 @@ return packer.startup(function(use)
     use 'wbthomason/packer.nvim'    -- Have packer manage itself
     use 'nvim-lua/popup.nvim'       -- An implementation of the Popup API from the vim in Neovim
     use "nvim-lua/plenary.nvim"     -- Useful lua functions used by lots of plugins
-    use 'nvim-tree/nvim-web-devicons'
-    use {'nvim-tree/nvim-tree.lua',
+    use {
+        'nvim-tree/nvim-tree.lua',
         requires = {
             'nvim-tree/nvim-web-devicons',  -- optional, for file icons
         },
-        tag = 'nightly' -- updated every week
     }
+    use "windwp/nvim-autopairs"     -- Autopairs, integrates with both cmp and treesitter
 
     -- Colorschemes
     use 'folke/tokyonight.nvim'
 
-    -- cmp plugins
+    -- CMP plugins (autocompletion)
     use 'hrsh7th/nvim-cmp'          -- The completion plugin
     use 'hrsh7th/cmp-buffer'        -- buffer completions
     use 'hrsh7th/cmp-path'          -- path completions
@@ -54,17 +54,22 @@ return packer.startup(function(use)
     use 'L3MON4D3/LuaSnip'  -- snippet engine
     use 'rafamadriz/friendly-snippets' -- a bunch of snippets to use
 
-    -- LSP
+    -- LSP (language autocompletion
     use 'neovim/nvim-lspconfig'             -- enable LSP
     use 'williamboman/mason.nvim'           -- simple to use language server installer
     use 'williamboman/mason-lspconfig.nvim' -- 
 
-    -- Telescope 
-    use {'nvim-telescope/telescope.nvim',
+    -- Telescope (find files)
+    use {
+        'nvim-telescope/telescope.nvim',
         requires = {
             'nvim-lua/plenary.nvim',
-        }
+        },
     }
     use 'nvim-telescope/telescope-media-files.nvim'
+
+    -- Treesitter (syntax highlighting)
+    use 'nvim-treesitter/nvim-treesitter'
+    use 'p00f/nvim-ts-rainbow'  -- parentheses and delimiters highlighting
 
 end)
