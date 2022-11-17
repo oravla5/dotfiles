@@ -19,12 +19,12 @@ configs.setup {
         enable = true,
         disable = { "yaml" }
     },
-    --rainbow = {
-    --    enable = true,
-    --    -- siable = { "jsx", "cpp" }, -- list of languages you want to disable the plugin for
-    --    extended_mode = true,   -- Als highlight non-bracket delimiters like html tags, boolean or table: -> boolean
-    --    max_file_lines = nil,   -- Do not enable for files with more than n lines, int
-    --    -- colors = {}, -- table of hex strins
-    --    -- termcolors = {}, -- table of colour name strings
-    --},
+    rainbow = {
+        enable = true,
+        -- siable = { "jsx", "cpp" }, -- list of languages you want to disable the plugin for
+        extended_mode = true,   -- Als highlight non-bracket delimiters like html tags, boolean or table: -> boolean
+        max_file_lines = nil,   -- Do not enable for files with more than n lines, int
+        -- colors = {}, -- table of hex strins
+        -- termcolors = {}, -- table of colour name strings
+    },
 }

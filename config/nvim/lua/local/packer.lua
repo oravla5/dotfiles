@@ -74,20 +74,8 @@ return packer.startup({
                 ts_update()
             end,
         }
-        --use {
-        --    "p00f/nvim-ts-rainbow",  -- parentheses and delimiters highlighting
-        --    requires = {
-        --        "nvim-treesitter/nvim-treesitter",
-        --    },
-        --    after = {
-        --        "nvim-treesitter",
-        --    },
-        --}
-        -- Automatically set up configuration after cloning packer.nvim
-        -- Put this at the end after all plugins
-        --if PACKER_BOOTSTRAP then
-        --    require("packer").sync()
-        --end
+        use "p00f/nvim-ts-rainbow"  -- parentheses and delimiters highlighting
+
     end,
     config = {
         opt_default = false,
