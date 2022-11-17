@@ -104,10 +104,27 @@ if [ -d ~/.local/share/nvim/site/pack/packer ] ; then
     fi
 fi
 
+# Download pcaker manager
 echo "[$SCRIPT_NAME] INFO: Download Packer plugin manager."
 git clone --quiet --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 if [ $? == 1 ]; then
     echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to download Packer plugin manager (https://github.com/wbthomason/packer.nvim).\033[0m"
+    exit 1
+fi
+
+# Install packer.nvim plugins
+echo "[$SCRIPT_NAME] INFO: Install packer.nvim plugins."
+nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' >/dev/null 2>&1
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[ERROR] Error installing packer.nvim plugins.\033[0m" 
+    exit 1
+fi
+
+# Install nvim-treesitter parsers
+echo "[$SCRIPT_NAME] INFO: Install nvim-treesitter parsers."
+nvim --headless -c 'TSUpdate' -c 'qall' >/dev/null 2>&1
+if [ $? == 1 ]; then
+    echo -e "\033[1;91m[ERROR] Error installing nvim-treesitter parsers.\033[0m" 
     exit 1
 fi
 
