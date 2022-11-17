@@ -27,12 +27,12 @@ if [ -d $INSTALL_DIR/neovim ] ; then
     fi
 fi
 
-# If packer is found
-if [ -d ~/.local/share/nvim/site/pack/packer ] ; then
-    echo "[$SCRIPT_NAME] INFO: Remove existing packer directory."
-    $sudo_cmd rm -rf ~/.local/share/nvim/site/pack/packer
+# If local data is found
+if [ -d ~/.local/share/nvim ] ; then
+    echo "[$SCRIPT_NAME] INFO: Remove neovim local data."
+    $sudo_cmd rm -rf ~/.local/share/nvim
     if [ $? == 1 ]; then
-        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove packer directory (~/.local/share/nvim/site/pack/packer).\033[0m"
+        echo -e "\033[1;91m[$SCRIPT_NAME] ERROR: Failed to remove nvim local directory (~/.local/share/nvim).\033[0m"
         exit 1
     fi
 fi
