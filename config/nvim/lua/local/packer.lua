@@ -40,6 +40,7 @@ return packer.startup({
             },
         }
         use "windwp/nvim-autopairs"     -- Autopairs, integrates with both cmp and treesitter
+        use "numToStr/Comment.nvim"     -- Easily comment stuff
 
         -- Colorschemes
         use 'folke/tokyonight.nvim'
@@ -75,6 +76,7 @@ return packer.startup({
             end,
         }
         use "p00f/nvim-ts-rainbow"  -- parentheses and delimiters highlighting
+        use "JoosepAlviste/nvim-ts-context-commentstring"
 
     end,
     config = {
