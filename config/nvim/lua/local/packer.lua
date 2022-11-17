@@ -78,8 +78,11 @@ return packer.startup({
         use "p00f/nvim-ts-rainbow"  -- parentheses and delimiters highlighting
         use "JoosepAlviste/nvim-ts-context-commentstring"
 
+        -- Git
+        use "lewis6991/gitsigns.nvim"
     end,
     config = {
         opt_default = false,
     }
 })
+
