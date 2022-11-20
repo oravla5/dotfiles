@@ -35,6 +35,8 @@ return packer.startup({
         use 'nvim-tree/nvim-tree.lua'       -- File explorer
         use "windwp/nvim-autopairs"         -- Autopairs, integrates with both cmp and treesitter
         use "numToStr/Comment.nvim"         -- Easily comment stuff
+        --[[ use "akinsho/bufferline.nvim" ]]
+        --[[ use "moll/vim-bbye" ]]
 
         -- Colorschemes
         use 'folke/tokyonight.nvim'
@@ -56,6 +58,7 @@ return packer.startup({
         use 'neovim/nvim-lspconfig'             -- enable LSP
         use 'williamboman/mason.nvim'           -- simple to use language server installer
         use 'williamboman/mason-lspconfig.nvim' -- 
+        use "jose-elias-alvarez/null-ls.nvim"   -- 
 
         -- Telescope (find files)
         use "nvim-telescope/telescope.nvim"
