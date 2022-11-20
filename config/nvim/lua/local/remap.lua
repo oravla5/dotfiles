@@ -19,22 +19,27 @@ nnoremap("<C-Right>", ":vertical resize +-<CR>")
 nnoremap("<C-j>", ":m .+1<CR>==")
 nnoremap("<C-k>", ":m .-2<CR>==")
 
+-- Navigate buffers
+nnoremap("<S-l>", ":bnext<CR>")
+nnoremap("<S-h>", ":bprevious<CR>")
+
 -- Buffer manipulation
-nnoremap("<leader>w", ":w<CR>")     -- Save changes in current buffer
-nnoremap("<leader>W", ":wa<CR>")    -- Save changes in all buffers
-nnoremap("<leader>q", ":wq<CR>")    -- Close current buffer saving changes
-nnoremap("<leader>Q", ":q!<CR>")   -- Close current buffer discarding changes
+nnoremap("<leader>w", ":w<CR>") -- Save changes in current buffer
+nnoremap("<leader>W", ":wa<CR>") -- Save changes in all buffers
+nnoremap("<leader>q", ":wq<CR>") -- Close current buffer saving changes
+nnoremap("<leader>Q", ":q!<CR>") -- Close current buffer discarding changes
 
 -- Exiting nvim
-nnoremap("<leader>x", ":wqa<CR>")   -- Close nvim saving all changes
-nnoremap("<leader>X", ":qa!<CR>")   -- Close nvim discarding all changes
+nnoremap("<leader>x", ":wqa<CR>") -- Close nvim saving all changes
+nnoremap("<leader>X", ":qa!<CR>") -- Close nvim discarding all changes
 
 -- NvimTree bindings
 nnoremap("<leader>ec", "<cmd>NvimTreeClose<CR>")
 nnoremap("<leader>ee", "<cmd>NvimTreeFocus<CR>")
 
 -- Telescope
-nnoremap("<leader>t", "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{ previewer = false })<CR>")
+nnoremap("<leader>t",
+    "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{ previewer = false })<CR>")
 nnoremap("<leader>T", "<cmd>Telescope live_grep<CR>")
 
 -- LSP
@@ -55,4 +60,3 @@ vnoremap(">", ">gv")
 -- Move text up and down
 vnoremap("<A-k>", ":m .-2<CR>==")
 vnoremap("<A-j>", ":m .+1<CR>==")
-
