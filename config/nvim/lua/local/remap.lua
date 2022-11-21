@@ -26,10 +26,10 @@ nnoremap("<S-h>", ":bprevious<CR>")
 -- Buffer manipulation
 nnoremap("<leader>w", ":w<CR>") -- Save changes in current buffer
 nnoremap("<leader>W", ":wa<CR>") -- Save changes in all buffers
-nnoremap("<leader>q", ":wq<CR>") -- Close current buffer saving changes
-nnoremap("<leader>Q", ":q!<CR>") -- Close current buffer discarding changes
+nnoremap("<leader>q", ":w<CR>:Bdelete<CR>") -- Close current buffer saving changes but keep window
+nnoremap("<leader>Q", ":Bdelete!<CR>") -- Close current buffer discarding changes
 
--- Exiting nvim
+-- Exiting neovim
 nnoremap("<leader>x", ":wqa<CR>") -- Close nvim saving all changes
 nnoremap("<leader>X", ":qa!<CR>") -- Close nvim discarding all changes
 
