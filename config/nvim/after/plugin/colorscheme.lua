@@ -1,5 +1,5 @@
 -- Define colorscheme and load configuration
-local colorscheme = "catppuccin"
+local colorscheme = "darkplus"
 pcall(require, colorscheme .. "-config.lua")
 
 local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)

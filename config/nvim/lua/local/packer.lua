@@ -33,6 +33,7 @@ return packer.startup({
         use "nvim-lua/popup.nvim" -- An implementation of the Popup API from the vim in Neovim
         use 'nvim-tree/nvim-web-devicons' -- optional, for file icons
         use 'nvim-tree/nvim-tree.lua' -- File explorer
+        use "nvim-lualine/lualine.nvim" -- Status line written in Lua
         use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter
         use "numToStr/Comment.nvim" -- Easily comment stuff
         use "akinsho/toggleterm.nvim" -- Built-in terminal
@@ -40,7 +41,8 @@ return packer.startup({
         use "moll/vim-bbye"
 
         -- Colorschemes
-        use 'folke/tokyonight.nvim'
+        use "folke/tokyonight.nvim"
+        use "lunarvim/darkplus.nvim"
         use { "catppuccin/nvim", as = "catppuccin" }
 
         -- CMP plugins (autocompletion)
