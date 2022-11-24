@@ -87,6 +87,12 @@ M.on_attach = function(client, bufnr)
     end
     lsp_keymaps(bufnr)
     lsp_highlight_document(client)
+
+    local status_ok, illuminate = pcall(require, "illuminate")
+    if not status_ok then
+        return
+    end
+    illuminate.on_attach(client)
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()

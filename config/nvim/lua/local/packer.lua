@@ -63,6 +63,7 @@ return packer.startup({
         use 'williamboman/mason.nvim' -- simple to use language server installer
         use 'williamboman/mason-lspconfig.nvim' --
         use "jose-elias-alvarez/null-ls.nvim" --
+        use "RRethy/vim-illuminate" -- currently selected word highlighting
 
         -- Telescope (find files)
         use "nvim-telescope/telescope.nvim"
