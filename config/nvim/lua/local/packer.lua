@@ -37,8 +37,9 @@ return packer.startup({
         use "windwp/nvim-autopairs" -- Autopairs, integrates with both cmp and treesitter
         use "numToStr/Comment.nvim" -- Easily comment stuff
         use "akinsho/toggleterm.nvim" -- Built-in terminal
-        use "akinsho/bufferline.nvim"
-        use "moll/vim-bbye"
+        use "akinsho/bufferline.nvim" --
+        use "moll/vim-bbye" -- Buffer closing
+        use "folke/which-key.nvim" -- Displays popup with possible key bindings
 
         -- Colorschemes
         use "folke/tokyonight.nvim"
