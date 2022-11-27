@@ -79,6 +79,7 @@ local normal_leader_opts = {
 }
 
 local normal_leader_mappings = {
+    ["a"] = {"<CMD>Alpha<CR>", "Alpha"},
     ["b"] = {
         "<CMD>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<CR>",
         "Buffers",

@@ -40,6 +40,8 @@ return packer.startup({
         use "akinsho/bufferline.nvim" --
         use "moll/vim-bbye" -- Buffer closing
         use "folke/which-key.nvim" -- Displays popup with possible key bindings
+        use "goolord/alpha-nvim" -- Neovim greeter
+        use "ahmedkhalf/project.nvim" -- Neovim project manager
 
         -- Colorschemes
         use "folke/tokyonight.nvim"
