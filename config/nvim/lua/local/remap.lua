@@ -37,14 +37,8 @@ nnoremap("<leader>X", ":qa!<CR>") -- Close nvim discarding all changes
 nnoremap("<leader>ec", "<cmd>NvimTreeClose<CR>")
 nnoremap("<leader>ee", "<cmd>NvimTreeFocus<CR>")
 
--- Telescope
-nnoremap("<leader>t",
-    "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{ previewer = false })<CR>")
-nnoremap("<leader>T", "<cmd>Telescope live_grep<CR>")
-
 -- LSP
-nnoremap("<leader>f", ":Format<CR>")
-
+--nnoremap("<leader>f", ":Format<CR>")
 
 -- Insert mode
 -- Press jk fast to exist insert mode

@@ -69,7 +69,7 @@ local setup = {
     },
 }
 
-local opts = {
+local normal_leader_opts = {
     mode = "n", -- NORMAL mode
     prefix = "<leader>",
     buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
@@ -78,23 +78,77 @@ local opts = {
     nowait = true, -- use `nowait` when creating keymaps
 }
 
-local mappings = {
+local normal_leader_mappings = {
+    ["b"] = {
+        "<CMD>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<CR>",
+        "Buffers",
+    },
     e = {
         name = "Explorer",
-        e = { "<cmd>NvimTreeFocus<CR>", "Focus on Explorer" },
-        c = { "<cmd>NvimTreeClose<CR>", "Close Explorer" },
+        e = { "<CMD>NvimTreeFocus<CR>", "Focus on Explorer" },
+        c = { "<CMD>NvimTreeClose<CR>", "Close Explorer" },
     },
-    ["t"] = { "<cmd>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{ previewer = false })<CR>",
-        "Find files" },
-    ["T"] = { "<cmd>Telescope live_grep theme=ivy<CR>", "Find text" },
-
-    ["w"] = { "<cmd>w<CR>", "Save changes in current buffer." },
-    ["W"] = { "<cmd>wa<CR>", "Save changes in all open buffers" },
-    ["q"] = { "<cmd>w<CR><cmd>Bdelete<CR>", "Close current buffer saving changes (keeps window open)." },
-    ["Q"] = { "<cmd>Bdelete!<CR>", "Close current buffer discarding changes" },
-    ["x"] = { "<cmd>wqa<CR>", "Close Neovim saving all changes" },
-    ["X"] = { "<cmd>qa!<CR>", "Close Neovim discarding all changes" },
+    ["f"] = {
+        "<CMD>lua require('telescope.builtin').find_files(require('telescope.themes').get_dropdown{ previewer = false })<CR>",
+        "Find files"
+    },
+    ["F"] = { "<CMD>Telescope live_grep theme=ivy<CR>", "Find text" },
+    g = {
+        name = "Git",
+        l = { "<CMD>lua require 'gitsigns'.blame_line()<CR>", "Blame" },
+        o = { "<CMD>Telescope git_status<CR>", "Open changed file" },
+        b = { "<CMD>Telescope git_branches<CR>", "Checkout branch" },
+        c = { "<CMD>Telescope git_commits<CR>", "Checkout commit" },
+        d = { "<CMD>Gitsigns diffthis HEAD<CR>", "Diff" },
+    },
+    l = {
+        name = "LSP",
+        a = { "<CMD>lua vim.lsp.buf.code_action()<CR>", "Code Action" },
+        d = { "<CMD>Telescope diagnostics bufnr=0<CR>", "Document Diagnostics" },
+        w = { "<CMD>Telescope diagnostics<CR>", "Workspace Diagnostics" },
+        f = { "<CMD>lua vim.lsp.buf.format{async=true}<CR>", "Format" },
+        i = { "<CMD>LspInfo<CR>", "Info" },
+        I = { "<CMD>LspInstallInfo<CR>", "Installer Info" },
+        j = { "<CMD>lua vim.lsp.diagnostics.goto_next()<CR>", "Next Diagnostics" },
+        k = { "<CMD>lua vim.lsp.diagnostics.goto_prev()<CR>", "Previous Diagnostics" },
+        l = { "<CMD> lua vim.lsp.codelens.run()<CR>", "CodeLens Action" },
+        q = { "<CMD>lua vim.diagnostic.setloclist()<CR>", "Quickfix" },
+        r = { "<CMD>lua vim.lsp.buf.rename()<CR>", "Rename" },
+        s = { "<CMD>Telescope lsp_document_symbols<CR>", "Document Symbols" },
+        S = { "<CMD>Telescope lsp_dynamic_workspace_symbols<CR>", "Workspace Symbols" },
+    },
+    p = {
+        name = "Packer",
+        c = { "<CMD>PackerCompile<CR>", "Compile" },
+        i = { "<CMD>PackerInstall<CR>", "Install" },
+        s = { "<CMD>PackerSync<CR>", "Sync" },
+        S = { "<CMD>PackerStatus<CR>", "Status" },
+        u = { "<CMD>PackerUpdate<CR>", "Update" },
+    },
+    s = {
+        name = "Search",
+        b = { "<CMD>Telescope git_branches<cr>", "Checkout branch" },
+        c = { "<CMD>Telescope colorscheme<cr>", "Colorscheme" },
+        h = { "<CMD>Telescope help_tags<cr>", "Find Help" },
+        M = { "<CMD>Telescope man_pages<cr>", "Man Pages" },
+        r = { "<CMD>Telescope oldfiles<cr>", "Open Recent File" },
+        R = { "<CMD>Telescope registers<cr>", "Registers" },
+        k = { "<CMD>Telescope keymaps<cr>", "Keymaps" },
+        C = { "<CMD>Telescope commands<cr>", "Commands" },
+    },
+    t = {
+        name = "Terminal",
+        f = { "<CMD>ToggleTerm direction=float<CR>", "Float" },
+        h = { "<CMD>ToggleTerm direction=horizontal<CR>", "Horizontal" },
+        v = { "<CMD>ToggleTerm direction=vertical<CR>", "Vertical" },
+    },
+    ["w"] = { "<CMD>w<CR>", "Save changes in current buffer." },
+    ["W"] = { "<CMD>wa<CR>", "Save changes in all open buffers" },
+    ["q"] = { "<CMD>w<CR><cmd>Bdelete<CR>", "Close current buffer saving changes (keeps window open)." },
+    ["Q"] = { "<CMD>Bdelete!<CR>", "Close current buffer discarding changes" },
+    ["x"] = { "<CMD>wqa<CR>", "Close Neovim saving all changes" },
+    ["X"] = { "<CMD>qa!<CR>", "Close Neovim discarding all changes" },
 }
 
 which_key.setup(setup)
-which_key.register(mappings, opts)
+which_key.register(normal_leader_mappings, normal_leader_opts)

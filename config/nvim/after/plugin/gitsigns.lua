@@ -28,13 +28,13 @@ gitsigns.setup {
         ignore_whitespace = false,
     },
     current_line_blame_formatter_opts = {
-    relative_time = false,
+        relative_time = false,
     },
-        sign_priority = 6,
-        update_debounce = 100,
-        status_formatter = nil, -- Use default
-        max_file_length = 40000,
-        preview_config = {
+    sign_priority = 6,
+    update_debounce = 100,
+    status_formatter = nil, -- Use default
+    max_file_length = 40000,
+    preview_config = {
         -- Options passed to nvim_open_win
         border = "single",
         style = "minimal",
