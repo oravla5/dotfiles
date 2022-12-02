@@ -1,4 +1,5 @@
 local status_ok, which_key = pcall(require, "which-key")
+
 if not status_ok then
     return
 end
@@ -79,7 +80,7 @@ local normal_leader_opts = {
 }
 
 local normal_leader_mappings = {
-    ["a"] = {"<CMD>Alpha<CR>", "Alpha"},
+    ["a"] = { "<CMD>Alpha<CR>", "Alpha" },
     ["b"] = {
         "<CMD>lua require('telescope.builtin').buffers(require('telescope.themes').get_dropdown{previewer = false})<CR>",
         "Buffers",
@@ -110,8 +111,8 @@ local normal_leader_mappings = {
         f = { "<CMD>lua vim.lsp.buf.format{async=true}<CR>", "Format" },
         i = { "<CMD>LspInfo<CR>", "Info" },
         I = { "<CMD>LspInstallInfo<CR>", "Installer Info" },
-        j = { "<CMD>lua vim.lsp.diagnostics.goto_next()<CR>", "Next Diagnostics" },
-        k = { "<CMD>lua vim.lsp.diagnostics.goto_prev()<CR>", "Previous Diagnostics" },
+        j = { "<CMD>lua vim.diagnostic.goto_next()<CR>", "Next Diagnostics" },
+        k = { "<CMD>lua vim.diagnostic.goto_prev()<CR>", "Previous Diagnostics" },
         l = { "<CMD> lua vim.lsp.codelens.run()<CR>", "CodeLens Action" },
         q = { "<CMD>lua vim.diagnostic.setloclist()<CR>", "Quickfix" },
         r = { "<CMD>lua vim.lsp.buf.rename()<CR>", "Rename" },
