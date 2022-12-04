@@ -1,3 +1,10 @@
+--       █████╗ ██╗    ██╗███████╗███████╗ ██████╗ ███╗   ███╗███████╗
+--      ██╔══██╗██║    ██║██╔════╝██╔════╝██╔═══██╗████╗ ████║██╔════╝
+--      ███████║██║ █╗ ██║█████╗  ███████╗██║   ██║██╔████╔██║█████╗
+--      ██╔══██║██║███╗██║██╔══╝  ╚════██║██║   ██║██║╚██╔╝██║██╔══╝
+--      ██║  ██║╚███╔███╔╝███████╗███████║╚██████╔╝██║ ╚═╝ ██║███████╗
+--      ╚═╝  ╚═╝ ╚══╝╚══╝ ╚══════╝╚══════╝ ╚═════╝ ╚═╝     ╚═╝╚══════╝
+
 -- If LuaRocks is installed, make sure that packages installed through it are
 -- found (e.g. lgi). If LuaRocks is not installed, do nothing.
 pcall(require, "luarocks.loader")
@@ -5,6 +12,81 @@ pcall(require, "luarocks.loader")
 -- Standard awesome library
 local gears = require("gears")
 local awful = require("awful")
+
+-- ===================================================================
+-- User Configuration
+-- ===================================================================
+
+--local theme_config_dir = gears.filesystem.get_configuration_dir() .. theme .. "/"
+
+-- define default apps (global variable so other components can access it)
+apps = {
+    network_manager = "",
+    power_manager = "",
+    terminal = "alacritty",
+    lock = "",
+    launcher = "rofi -show run",
+    screenshot = "scrot -e 'mv $f ~/images/screenshots/ 2>/dev/null",
+    file_browser = "nautilus",
+    web_browser = "firefox",
+}
+
+-- define wireless and ethernet interface names for the network widget
+-- use `ip link` command to determine these
+network_interfaces = {
+    wlan = 'wlp1s0',
+    lan = 'enp1s0'
+}
+
+-- ===================================================================
+-- Initialization
+-- ===================================================================
+
+-- Import notification appearance
+--require("components.notifications")
+
+-- List of apps to run on start-up
+local run_on_start_up = {
+    "~/.screenlayout/home_office_setup.sh",
+    "compton",
+}
+
+-- Run all the apps listed in run_on_start_up
+for _, app in ipairs(run_on_start_up) do
+    local findme = app
+    local firstspace = app:find(" ")
+    if firstspace then
+        findme = app:sub(0, firstspace - 1)
+    end
+    -- pipe commands to bash to allow command to be shell agnostic
+    awful.spawn.with_shell(string.format("echo 'pgrep -u $USER -x %s > /dev/null || (%s)' | bash -", findme, app), false)
+end
+
+-- Import theme
+
+
+
+-- Initialize theme
+
+
+-- Import keybinds
+local keys = require("keys")
+root.keys(keys.globalkeys)
+root.buttons(keys.desktopbuttons)
+
+
+-- Import rules
+local create_rules = require("rules").create
+awful.rules.rules = create_rules(keys.clientkeys, keys.clientbuttons)
+
+-- Define layouts
+awful.layout.layouts = {
+    awful.layout.suit.tile,
+    awful.layout.suit.floating,
+    awful.layout.suit.max,
+}
+
+
 require("awful.autofocus")
 -- Widget and layout library
 local wibox = require("wibox")
@@ -59,25 +141,6 @@ editor_cmd = terminal .. " -e " .. editor
 -- However, you can use another modifier like Mod1, but it may interact with others.
 modkey = "Mod4"
 
--- Table of layouts to cover with awful.layout.inc, order matters.
-awful.layout.layouts = {
-    awful.layout.suit.floating,
-    awful.layout.suit.tile,
-    awful.layout.suit.tile.left,
-    awful.layout.suit.tile.bottom,
-    awful.layout.suit.tile.top,
-    awful.layout.suit.fair,
-    awful.layout.suit.fair.horizontal,
-    awful.layout.suit.spiral,
-    awful.layout.suit.spiral.dwindle,
-    awful.layout.suit.max,
-    awful.layout.suit.max.fullscreen,
-    awful.layout.suit.magnifier,
-    awful.layout.suit.corner.nw,
-    -- awful.layout.suit.corner.ne,
-    -- awful.layout.suit.corner.sw,
-    -- awful.layout.suit.corner.se,
-}
 -- }}}
 
 -- {{{ Menu
@@ -229,8 +292,6 @@ root.buttons(gears.table.join(
 
 -- {{{ Key bindings
 globalkeys = gears.table.join(
-    awful.key({ modkey, }, "s", hotkeys_popup.show_help,
-        { description = "show help", group = "awesome" }),
     awful.key({ modkey, }, "Left", awful.tag.viewprev,
         { description = "view previous", group = "tag" }),
     awful.key({ modkey, }, "Right", awful.tag.viewnext,
@@ -310,9 +371,6 @@ globalkeys = gears.table.join(
         end,
         { description = "restore minimized", group = "client" }),
 
-    -- Prompt
-    awful.key({ modkey }, "r", function() awful.screen.focused().mypromptbox:run() end,
-        { description = "run prompt", group = "launcher" }),
 
     awful.key({ modkey }, "x",
         function()
@@ -336,7 +394,7 @@ clientkeys = gears.table.join(
             c:raise()
         end,
         { description = "toggle fullscreen", group = "client" }),
-    awful.key({ modkey, "Shift" }, "c", function(c) c:kill() end,
+    awful.key({ modkey }, "q", function(c) c:kill() end,
         { description = "close", group = "client" }),
     awful.key({ modkey, "Control" }, "space", awful.client.floating.toggle,
         { description = "toggle floating", group = "client" }),
@@ -437,68 +495,6 @@ clientbuttons = gears.table.join(
     end)
 )
 
--- Set keys
-root.keys(globalkeys)
--- }}}
-
--- {{{ Rules
--- Rules to apply to new clients (through the "manage" signal).
-awful.rules.rules = {
-    -- All clients will match this rule.
-    { rule = {},
-        properties = { border_width = beautiful.border_width,
-            border_color = beautiful.border_normal,
-            focus = awful.client.focus.filter,
-            raise = true,
-            keys = clientkeys,
-            buttons = clientbuttons,
-            screen = awful.screen.preferred,
-            placement = awful.placement.no_overlap + awful.placement.no_offscreen
-        }
-    },
-
-    -- Floating clients.
-    { rule_any = {
-        instance = {
-            "DTA", -- Firefox addon DownThemAll.
-            "copyq", -- Includes session name in class.
-            "pinentry",
-        },
-        class = {
-            "Arandr",
-            "Blueman-manager",
-            "Gpick",
-            "Kruler",
-            "MessageWin", -- kalarm.
-            "Sxiv",
-            "Tor Browser", -- Needs a fixed window size to avoid fingerprinting by screen size.
-            "Wpa_gui",
-            "veromix",
-            "xtightvncviewer"
-        },
-
-        -- Note that the name property shown in xprop might be set slightly after creation of the client
-        -- and the name shown there might not match defined rules here.
-        name = {
-            "Event Tester", -- xev.
-        },
-        role = {
-            "AlarmWindow", -- Thunderbird's calendar.
-            "ConfigManager", -- Thunderbird's about:config.
-            "pop-up", -- e.g. Google Chrome's (detached) Developer Tools.
-        }
-    }, properties = { floating = true } },
-
-    -- Add titlebars to normal clients and dialogs
-    { rule_any = { type = { "normal", "dialog" }
-    }, properties = { titlebars_enabled = true }
-    },
-
-    -- Set Firefox to always map on the tag named "2" on screen 1.
-    -- { rule = { class = "Firefox" },
-    --   properties = { screen = 1, tag = "2" } },
-}
--- }}}
 
 -- {{{ Signals
 -- Signal function to execute when a new client appears.
@@ -563,10 +559,3 @@ end)
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
-
--- Autostart Applications
-awful.spawn.with_shell("compton")
---awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("~/.screenlayout/home_office_setup.sh")
-
---awful.spawn_with_shell("")
