@@ -59,7 +59,7 @@ function rules.create(clientkeys, clientbuttons)
                     "pinentry", -- Password, pin entry utility
                 },
                 class = {
-                    "Nm-connection-editor"
+                    apps.network_manager,
                 },
                 name = {
                     "Event Tester",
