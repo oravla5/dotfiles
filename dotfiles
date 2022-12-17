@@ -1,44 +1,60 @@
 #!/bin/bash
+# Dotfiles installation script
 
-POSITIONAL_ARGS=()
+print_usage_and_exit() {
+   echo "Usage:
+        dotfiles --help | <config_type (minimal/full)> [--check] [--install]
+    "
+    exit 1
+}
+
+# Parse arguments
+if [[ -z "$1" ]] || ( [[ "$1" != "minimal" ]] && [[ "$1" != "full" ]] ) || ( [[ "$1" -eq "--help" ]] && [[ "$1" -eq "-h" ]] ); then
+    print_usage_and_exit
+else
+    CONFIG_TYPE="$1"
+    shift # pass minimal/full
+fi
 
 INSTALL_FLAG=0
-CHECK_FLAG = 0
+CHECK_FLAG=1
 
 while [[ $# -gt 0 ]]; do
-  case $1 in
-    -c|--check)
-      CHECK_FLAG=1
-      shift # past argument
-      ;;
-    -i|--install)
-      INSTALL_FLAG=1
-      shift # past argument
-      shift # past value
-      ;;
-    --default)
-      DEFAULT=YES
-      shift # past argument
-      ;;
-    -*|--*)
-      echo "Unknown option $1"
-      exit 1
-      ;;
-    *)
-      POSITIONAL_ARGS+=("$1") # save positional arg
-      shift # past argument
-      ;;
-  esac
+    case $1 in
+        -h|--help)
+            shift
+            echo "Showing help.\n"
+            print_usage_and_exit 
+            ;;
+        -c|--check)
+            CHECK_FLAG=1
+            shift # past argument
+            ;;
+        -i|--install)
+            INSTALL_FLAG=1
+            shift # past argument
+            ;;
+        -*|--*)
+            echo "Unknown option $1."
+            print_usage_and_exit
+            ;;
+        *)
+            echo "Unknown positional argument $1"
+            print_usage_and_exit
+            ;;
+    esac
 done
 
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+REQUIREMENTS_MINIMAL=""
+REQUIREMENTS_FULL=""
 
-echo "FILE EXTENSION  = ${EXTENSION}"
-echo "SEARCH PATH     = ${SEARCHPATH}"
-echo "DEFAULT         = ${DEFAULT}"
-echo "Number files in ${SEARCHPATH} with ${EXTENSION} extension:" $(ls -1 "${SEARCHPATH}"/*."${EXTENSION}" | wc -l)
 
-#if [[ -n $1 ]]; then
-#    echo "Last line of file specified as non-opt/last argument:"
-#    tail -1 "$1"
+#if [[ $INSTALL_FLAG -eq 1 ]]; then
+#    if ( [[ $INSTALL_FLAG -eq 1 ]] && ( [[ $INSTALL_TYPE != "full" ]] && [[ $INSTALL_TYPE != "minimal" ]] )); then
 #fi
+
+#echo "FILE EXTENSION  = ${EXTENSION}"
+#echo "SEARCH PATH     = ${SEARCHPATH}"
+#echo "DEFAULT         = ${DEFAULT}"
+#echo "Number files in ${SEARCHPATH} with ${EXTENSION} extension:" $(ls -1 "${SEARCHPATH}"/*."${EXTENSION}" | wc -l)
+
