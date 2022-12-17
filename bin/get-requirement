@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+PKG_NAME=$1
+
+
+exit 0
