@@ -8,6 +8,7 @@ sudo := $(shell is-supported "is-executable sudo" sudo)
 NVIM_VERSION = v0.8.0
 FZF_VERSION = 0.34.0
 GIT_VERSION = 2.26.0
+ALACRITTY_VERSION = 0.10.1
 
 export XDG_CONFIG_HOME = $(HOME)/.config
 export STOW_DIR = $(DOTFILES_DIR)
@@ -44,6 +45,9 @@ setup-fzf:
 
 setup-fonts:
 	@(install-fonts JetBrainsMono $(PROGRAMS_DIR) || (echo -e "\033[1;91m[ERROR] Error installing fonts.\033[0m"; sh -c 'exit 1'))
+
+setup-alacritty:
+	@(install-alacritty $(PROGRAMS_DIR) || (echo -e "\034[1;91m[ERROR] Error installing alacritty.\033[0m"; sh -c 'exit 1'))
 
 clean: unlink
 	@(clean-nvim $(PROGRAMS_DIR) $(XDG_CONFIG_HOME) || (echo -e "\033[1;91m[ERROR] Error cleaning Neovim.\033[0m"; sh -c 'exit 1'))
