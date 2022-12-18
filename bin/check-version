@@ -1,0 +1,137 @@
+#!/usr/bin/env bash
+
+#
+# Functions ==============================================
+#
+
+function have_same_length {
+    local array_1=( ${1//./ } )
+    local array_2=( ${2//./ } )
+    local same_length_=1
+
+    if [ ${#array_1[@]} != ${#array_2[@]} ]; then
+        same_length_=0
+    fi
+    echo "$same_length_"
+}
+
+# checks version is equal to value
+function is_equal {
+    local left_version=( ${1//./ } )
+    local right_version=( ${2//./ } )
+    local pass_=1
+
+    length_ok=$(have_same_length $1 $2)
+    if [[ $length_ok == 1 ]]; then
+        for i in "${!left_version[@]}";
+        do
+            if [[ "${left_version[$i]}" != "${right_version[$i]}" ]]; then
+                pass_=0
+                break
+            fi
+        done
+    else
+        pass_=0
+    fi
+
+    echo "$pass_"
+    exit $pass_
+}
+
+# checks version is not equal to value
+function is_not_equal {
+    local pass_=1
+
+    equal=$(is_equal $1 $2)
+    if [[ $equal == 1 ]]; then
+        pass_=0
+    fi
+
+    echo "$pass_"
+}
+
+# checks version is greater than value
+function is_greater {
+    local left_version=( ${1//./ } )
+    local right_version=( ${2//./ } )
+    local pass_=1
+
+    length_ok=$(have_same_length $1 $2)
+    if [[ $length_ok == 1 ]]; then
+        for i in "${!left_version[@]}";
+        do
+            if [[ "${left_version[$i]}" -gt "${right_version[$i]}" ]]; then
+                pass_=1
+                break
+            elif [[ "${left_version[$i]}" -lt "${right_version[$i]}" ]]; then
+                pass_=0
+                break
+            fi
+        done
+    else
+        pass_=0
+    fi
+
+    echo "$pass_"
+}
+
+# checks version is less than value
+function is_less {
+    local left_version=( ${1//./ } )
+    local right_version=( ${2//./ } )
+    local pass_=1
+
+    length_ok=$(have_same_length $1 $2)
+    if [[ $length_ok == 1 ]]; then
+        for i in "${!left_version[@]}";
+        do
+            if [[ "${left_version[$i]}" < "${right_version[$i]}" ]]; then
+                pass_=1
+                break
+            elif [[ "${left_version[$i]}" > "${right_version[$i]}" ]]; then
+                pass_=0
+                break
+            fi
+        done
+    else
+        pass_=0
+    fi
+
+    echo "$pass_"
+}
+
+# ============================================== Functions
+
+requirement_version=$1
+version=$2
+requirement_condition=$3
+
+version_ok=0
+
+case $requirement_condition in
+    "==")
+        version_ok=$(is_equal $version $requirement_version)
+        ;;
+    "!=")
+        version_ok=$(is_not_equal $version $requirement_version)
+        ;;
+    ">=")
+        version_ok=$(is_equal $version $requirement_version)
+        if [[ $version_ok != 1 ]]; then
+            version_ok=$(is_greater $version $requirement_version)
+        fi
+        ;;
+    "<=")
+        version_ok=$(is_equal $version $requirement_version)
+        if [[ $version_ok != 1 ]]; then
+            version_ok=$(is_less $version $requirement_version)
+        fi
+        ;;
+    *)
+        echo "Unrecognized requirement condition $requirement_condition ."
+        version_ok=0
+        ;;
+
+esac
+
+echo $version_ok
