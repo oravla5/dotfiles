@@ -1,137 +1,213 @@
 #!/usr/bin/env bash
-
 #
-# Functions ==============================================
+# Checks provided version number against requirement condition
 #
-
-function have_same_length {
-    local array_1=( ${1//./ } )
-    local array_2=( ${2//./ } )
+#
+###########################################################
+# Checks if two versions have the same number of elements.
+#
+# Globals:
+#   None
+# Arguments
+#   - Version number 1 
+#   - Version number 2
+# Returns:
+#   1 if they have the same number of elements, 0 otherwise
+###########################################################
+have_same_length() {
+    # Parse inputs
+    local version_1=( ${1//./ } )
+    local version_2=( ${2//./ } )
+    
+    # Prepare output
     local same_length_=1
-
-    if [ ${#array_1[@]} != ${#array_2[@]} ]; then
+    
+    # Check lengths
+    if [ ${#version_1[@]} != ${#version_2[@]} ]; then
         same_length_=0
     fi
+
     echo "$same_length_"
 }
 
-# checks version is equal to value
-function is_equal {
-    local left_version=( ${1//./ } )
-    local right_version=( ${2//./ } )
-    local pass_=1
+###########################################################
+# Checks if two version number are equal.
+#
+# Globals:
+#   None
+# Arguments
+#   - Version number 1 (left side of the comparison)
+#   - Version number 2 (right side of the comparison)
+# Returns:
+#   1 if they are equal, 0 otherwise
+###########################################################
+is_equal() {
+    # Parse inputs
+    local version_left_side=( ${1//./ } )
+    local version_right_side=( ${2//./ } )
 
-    length_ok=$(have_same_length $1 $2)
-    if [[ $length_ok == 1 ]]; then
-        for i in "${!left_version[@]}";
+    # Prepare output
+    local result_=1
+
+    if [[ $(have_same_length $1 $2) == 1 ]]; then
+        for i in "${!version_left_side[@]}";
         do
-            if [[ "${left_version[$i]}" != "${right_version[$i]}" ]]; then
-                pass_=0
+            if [[ "${version_left_side[$i]}" != "${version_right_side[$i]}" ]]; then
+                result_=0
                 break
             fi
         done
     else
-        pass_=0
+        result_=0
     fi
 
-    echo "$pass_"
-    exit $pass_
+    echo "$result_"
 }
 
-# checks version is not equal to value
+###########################################################
+# Checks if two version number are not equal.
+#
+# Globals:
+#   None
+# Arguments
+#   - Version number 1 (left side of the comparison)
+#   - Version number 2 (right side of the comparison)
+# Returns:
+#   1 if they are not equal, 0 otherwise
+###########################################################
 function is_not_equal {
-    local pass_=1
+    # Prepare output
+    local result_=1
 
     equal=$(is_equal $1 $2)
     if [[ $equal == 1 ]]; then
-        pass_=0
+        result_=0
     fi
 
-    echo "$pass_"
+    echo "$result_"
 }
 
-# checks version is greater than value
-function is_greater {
-    local left_version=( ${1//./ } )
-    local right_version=( ${2//./ } )
-    local pass_=1
+################################################################
+# Checks if first version number is greater than the second one.
+#
+# Globals:
+#   None
+# Arguments
+#   - Version number 1 (left side of the comparison)
+#   - Version number 2 (right side of the comparison)
+# Returns:
+#   1 if version 1 is greater than version 2, 0 otherwise
+################################################################
+is_greater() {
+    # Parse inputs
+    local version_left_side=( ${1//./ } )
+    local version_right_side=( ${2//./ } )
 
-    length_ok=$(have_same_length $1 $2)
-    if [[ $length_ok == 1 ]]; then
-        for i in "${!left_version[@]}";
+    # Prepare output
+    local result_=1
+
+    if [[ $(have_same_length $1 $2) == 1 ]]; then
+        for i in "${!version_left_side[@]}";
         do
-            if [[ "${left_version[$i]}" -gt "${right_version[$i]}" ]]; then
-                pass_=1
+            if [[ "${version_left_side[$i]}" -gt "${version_right_side[$i]}" ]]; then
+                result_=1
                 break
-            elif [[ "${left_version[$i]}" -lt "${right_version[$i]}" ]]; then
-                pass_=0
+            elif [[ "${version_left_side[$i]}" -lt "${version_right_side[$i]}" ]]; then
+                result_=0
                 break
             fi
         done
     else
-        pass_=0
+        result_=0
     fi
 
-    echo "$pass_"
+    echo "$result_"
 }
 
-# checks version is less than value
-function is_less {
-    local left_version=( ${1//./ } )
-    local right_version=( ${2//./ } )
-    local pass_=1
+################################################################
+# Checks if first version number is less than the second one.
+#
+# Globals:
+#   None
+# Arguments
+#   - Version number 1 (left side of the comparison)
+#   - Version number 2 (right side of the comparison)
+# Returns:
+#   1 if version 1 is less than version 2, 0 otherwise
+################################################################
+is_less() {
+    # Parse inputs
+    local version_left_side=( ${1//./ } )
+    local version_right_side=( ${2//./ } )
 
-    length_ok=$(have_same_length $1 $2)
-    if [[ $length_ok == 1 ]]; then
-        for i in "${!left_version[@]}";
+    # Prepare output
+    local result_=1
+
+    if [[ $(have_same_length $1 $2) == 1 ]]; then
+        for i in "${!version_left_side[@]}";
         do
-            if [[ "${left_version[$i]}" < "${right_version[$i]}" ]]; then
-                pass_=1
+            if [[ "${version_left_side[$i]}" < "${version_right_side[$i]}" ]]; then
+                result_=1
                 break
-            elif [[ "${left_version[$i]}" > "${right_version[$i]}" ]]; then
-                pass_=0
+            elif [[ "${version_left_side[$i]}" > "${version_right_side[$i]}" ]]; then
+                result_=0
                 break
             fi
         done
     else
-        pass_=0
+        result_=0
     fi
 
-    echo "$pass_"
+    echo "$result_"
 }
 
-# ============================================== Functions
+################################################################
+# Checks if a version number meets the given version requirement.
+#
+# Globals:
+#   None
+# Arguments
+#   - Version requirement
+#   - Version number
+#   - Requirement condition (==, !=, >=, <=)
+# Returns:
+#   1 if version requirement is met, 0 otherwise
+################################################################
+check_version() {
+    # Parse inputs
+    local requirement_version=$1
+    local version=$2
+    local requirement_condition=$3
 
-requirement_version=$1
-version=$2
-requirement_condition=$3
+    # Prepare output
+    version_ok=0
+    case $requirement_condition in
+        "==")
+            version_ok=$(is_equal $version $requirement_version)
+            ;;
+        "!=")
+            version_ok=$(is_not_equal $version $requirement_version)
+            ;;
+        ">=")
+            version_ok=$(is_equal $version $requirement_version)
+            if [[ $version_ok != 1 ]]; then
+                version_ok=$(is_greater $version $requirement_version)
+            fi
+            ;;
+        "<=")
+            version_ok=$(is_equal $version $requirement_version)
+            if [[ $version_ok != 1 ]]; then
+                version_ok=$(is_less $version $requirement_version)
+            fi
+            ;;
+        *)
+            echo "Unrecognized requirement condition $requirement_condition ."
+            version_ok=0
+            ;;
+    
+    esac
 
-version_ok=0
+    echo $version_ok
+}
 
-case $requirement_condition in
-    "==")
-        version_ok=$(is_equal $version $requirement_version)
-        ;;
-    "!=")
-        version_ok=$(is_not_equal $version $requirement_version)
-        ;;
-    ">=")
-        version_ok=$(is_equal $version $requirement_version)
-        if [[ $version_ok != 1 ]]; then
-            version_ok=$(is_greater $version $requirement_version)
-        fi
-        ;;
-    "<=")
-        version_ok=$(is_equal $version $requirement_version)
-        if [[ $version_ok != 1 ]]; then
-            version_ok=$(is_less $version $requirement_version)
-        fi
-        ;;
-    *)
-        echo "Unrecognized requirement condition $requirement_condition ."
-        version_ok=0
-        ;;
-
-esac
-
-echo $version_ok
+echo "$(check_version $1 $2 $3)"
