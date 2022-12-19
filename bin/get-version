@@ -1,12 +1,67 @@
 #!/usr/bin/env bash
+#
+# Retrieves version of specified package
 
-CMD_NAME=$1
+# Binary directory (parent folder of current script)
+BIN_DIR=$(dirname "$0")
 
-# Check that the executable exists
-if ! command -v ${CMD_NAME}  &> /dev/null ; then
-    exit 1
-fi
+###########################################################
+# Checks if program is installed.
+#
+# Globals
+#   BIN_DIR 
+# Arguments
+#   program name
+# Returns
+#   1 if installed, 0 otherwise
+###########################################################
+is_installed() {
+    $BIN_DIR/is-executable $1
+    [[ $? = 0 ]] && echo "1" || echo "0"
+}
 
-# Extract version
-echo "$($CMD_NAME --version | grep -Po '(v|v |version|version |)([0-9]+\.)+[0-9]+' | grep -Po '([0-9]+\.)+[0-9]+')"
-exit 0
+#############################################################
+# Extracts version number by running $program_name --version.
+#
+# Globals
+#   BIN_DIR 
+# Arguments
+#   program name
+# Returns
+#   version number
+#   1 if successful, 0 otherwise
+#############################################################
+extract_version() {
+    # Extract version
+    local version_="$($1 --version | grep -Po '(v|v |version|version |)([0-9]+\.)+[0-9]+' | grep -Po '([0-9]+\.)+[0-9]+')"
+
+    for v in $version_; do
+        echo $v
+        exit 1
+    done
+    exit 0
+}
+
+###########################################################
+# Get version of specified program, if installed.
+#
+# Globals
+#   None  
+# Arguments
+#   program name
+# Returns
+#   version number
+#   1 if successful, 0 otherwise
+###########################################################
+get_version() {
+
+    if [[ $(is_installed $1) == "1" ]]; then
+        extract_version $1
+        exit $?
+    fi
+    exit 0
+}
+
+# Main
+get_version $1
+

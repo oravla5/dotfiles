@@ -17,7 +17,7 @@ BIN_DIR=$(dirname "$0")
 ###########################################################
 is_installed() {
     $BIN_DIR/is-executable $1
-    [[ $? = 0 ]] && echo "1" || echo "2"
+    [[ $? = 0 ]] && echo "1" || echo "0"
 }
 
 ###########################################################
@@ -140,6 +140,6 @@ check_requirement() {
     exit $result_
 }
 
-
+# Main
 check_requirement $1 $2 $3
 
