@@ -1,0 +1,145 @@
+#!/usr/bin/env bash
+#
+# Checks if package requirement is met.
+
+# Binary directory (parent folder of current script)
+BIN_DIR=$(dirname "$0")
+
+###########################################################
+# Checks if program is installed.
+#
+# Globals
+#   BIN_DIR 
+# Arguments
+#   program name
+# Returns
+#   1 if installed, 0 otherwise
+###########################################################
+is_installed() {
+    $BIN_DIR/is-executable $1
+    [[ $? = 0 ]] && echo "1" || echo "2"
+}
+
+###########################################################
+# Gets installed version of specified program.
+#
+# Globals
+#   BIN_DIR 
+# Arguments
+#   - program name
+# Returns
+#   available version of the program  
+###########################################################
+get_version() {
+    # Get available version
+    echo "$($BIN_DIR/get-version $1)"
+}
+
+###########################################################
+# Checks if program meets version requirement.
+#
+# Globals
+#   BIN_DIR 
+# Arguments
+#   - version requirement
+#   - available version
+#   - requirement condition
+# Returns
+#   1 if met, 0 otherwise
+###########################################################
+meets_requirement() {
+    # Parse inputs
+    local version_requirement=$1
+    local available_version=$2
+    local requirement_condition=$3
+
+    # Check installed version of the package against the requirement
+    echo "$($BIN_DIR/check-version $version_requirement $available_version $requirement_condition)"
+}
+
+###########################################################
+# Print program requirement summary.
+#
+# Globals
+#   None 
+# Arguments
+#   - requirement result
+#   - program name
+#   - version requirement
+#   - version available
+#   - requirement condition
+# Returns
+#   None
+###########################################################
+get_summary() {
+    local result=$1
+    local program_name=$2
+    local version_requirement=$3
+    local version_available=$4
+    local condition=$5
+
+    # Text formatting
+    BOLD=$(tput bold)
+    NORMAL=$(tput sgr0)
+    RED=$(tput setaf 1)
+    GREEN=$(tput setaf 2)
+
+    # Prepare output
+    local program_txt="${BOLD}$program_name${NORMAL}"
+    local success_txt="${RED}FAIL${NORMAL}"
+    local requirement_txt="$condition$version_requirement required"
+    local available_txt="${RED}not installed${NORMAL}"
+
+    if [[ $result == 1 ]]; then
+        success_txt="${GREEN}SUCCESS${NORMAL}"
+        available_txt="${GREEN}$version_available available${NORMAL}"
+    elif [[ $result == -1 ]]; then
+        available_txt="${RED}$version_available available${NORMAL}"
+    fi
+    
+    printf '%-25s %-25s %-20s %-20s\n' "$program_txt" "$success_txt" "$requirement_txt" "$available_txt" 
+}
+
+###########################################################
+# Checks program requirement.
+#
+# Globals
+#   None
+# Arguments
+#   - program name
+#   - version requirement
+#   - requirement condition
+# Returns
+#   0 if program is not installed,
+#   -1 if the wrong version of the program is installed,
+#   1 if the right version is installed
+###########################################################
+check_requirement() {
+    # Parse inputs
+    local program_name=$1
+    local version_requirement=$2
+    local requirement_condition=$3
+
+    # Prepare result
+    local result_=0
+    local available_version=""
+
+    if [[ $(is_installed $program_name) == 1 ]]; then
+        available_version=$(get_version $program_name)
+        local version_ok=$(meets_requirement $version_requirement $available_version $requirement_condition)   
+
+        if [[ $version_ok == 1 ]]; then
+            result_=1
+        else
+            result_=-1
+        fi
+    fi
+    
+    get_summary $result_ $program_name $version_requirement $available_version $requirement_condition
+    
+    exit $result_
+}
+
+
+check_requirement $1 $2 $3
+
