@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 #
-# Checks provided version number against requirement condition
-#
-#
+# Checks provided version number against requirement condition.
+
+
 ###########################################################
 # Checks if two versions have the same number of elements.
 #
@@ -211,3 +211,4 @@ check_version() {
 }
 
 echo "$(check_version $1 $2 $3)"
+
