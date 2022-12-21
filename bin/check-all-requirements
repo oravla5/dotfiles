@@ -1,0 +1,101 @@
+#!/usr/bin/env bash
+#
+# Checks the requirements defined in the <root>/requirements.txt file.
+
+# Binary directory (parent folder of current script)
+#BIN_DIR=$(dirname "$0")
+BIN_DIR=$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )
+ROOT_DIR=$(dirname $( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P ))
+REQUIREMENTS_FILE=$ROOT_DIR/requirements.txt
+
+###########################################################
+# Extracts requirement name from requirement string.
+#
+# Globals
+#   None
+# Arguments
+#   string containing requirement
+# Returns
+#   requirement name
+###########################################################
+extract_requirement_name() {
+    local requirement_name=$(echo $1 | grep -Po '[a-z]+')
+    echo $requirement_name
+}
+
+###########################################################
+# Extracts requirement version from requirement string.
+#
+# Globals
+#   None
+# Arguments
+#   string containing requirement
+# Returns
+#   required version 
+###########################################################
+extract_requirement_version() {
+    local requirement_version=$(echo $1 | grep -Po '([0-9]+\.)+[0-9]+')
+    echo $requirement_version
+}
+
+###########################################################
+# Extracts requirement condition from requirement string.
+#
+# Globals
+#   None
+# Arguments
+#   string containing requirement
+# Returns
+#   requirement condition  
+###########################################################
+extract_requirement_condition() {
+    local requirement_condition=$(echo $1 | grep -Po '==|>=|<=|!=')
+    echo $requirement_condition
+}
+
+###########################################################
+# Calls the requirement checker script.
+#
+# Globals
+#   BIN_DIR
+# Arguments
+#   - requirement name (program, package name)
+#   - requirement version number
+#   - requirement condition
+# Returns
+#   None
+###########################################################
+check_requirement() {
+    $BIN_DIR/check-requirement $1 $2 $3
+}
+
+
+###########################################################
+# Reads requirement file and checks each requirement in it.
+#
+# Globals
+#   REQUIREMENTS_FILE   
+# Arguments
+#   None
+# Returns
+#   None
+###########################################################
+check_all_requirements() {
+    while IFS= read -r requirement 
+    do
+        # For each line that is not a comment 
+        if [ "${requirement:0:1}" != "#" ]; then
+            # Parse requirement
+            local requirement_name=$(extract_requirement_name $requirement)
+            local requirement_version=$(extract_requirement_version $requirement)
+            local requirement_condition=$(extract_requirement_condition $requirement)
+
+            check_requirement $requirement_name $requirement_version $requirement_condition
+        fi
+    done < "$REQUIREMENTS_FILE"
+}
+
+
+# Main
+check_all_requirements
+
